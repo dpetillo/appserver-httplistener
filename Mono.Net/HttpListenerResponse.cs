@@ -69,11 +69,17 @@ namespace Mono.Net {
 
 		public Encoding ContentEncoding {
 			get {
+
+#if DNXCORE50
 				if (content_encoding == null)
-					content_encoding = Encoding.Default;
-				return content_encoding;
-			}
-			set {
+					content_encoding = Encoding.UTF8;
+#else
+                if (content_encoding == null)
+                    content_encoding = Encoding.Default;
+#endif
+                return content_encoding;
+            }
+            set {
 				if (disposed)
 					throw new ObjectDisposedException (GetType ().ToString ());
 
@@ -219,8 +225,12 @@ namespace Mono.Net {
 					throw new InvalidOperationException ("Cannot be changed after headers are sent.");
 					
 				if (value < 100 || value > 999)
-					throw new ProtocolViolationException ("StatusCode must be between 100 and 999.");
-				status_code = value;
+#if !DNXCORE50
+                    throw new ProtocolViolationException ("StatusCode must be between 100 and 999.");
+#else
+                    throw new Exception("StatusCode must be between 100 and 999.");
+#endif
+                status_code = value;
 				status_description = GetStatusDescription (value);
 			}
 		}
@@ -400,10 +410,14 @@ namespace Mono.Net {
 		internal void SendHeaders (bool closing, MemoryStream ms)
 		{
 			Encoding encoding = content_encoding;
+#if DNXCORE50
 			if (encoding == null)
-				encoding = Encoding.Default;
-
-			if (content_type != null) {
+				encoding = Encoding.UTF8;
+#else
+            if (encoding == null)
+                encoding = Encoding.Default;
+#endif
+            if (content_type != null) {
 				if (content_encoding != null && content_type.IndexOf ("charset=", StringComparison.Ordinal) == -1) {
 					string enc_name = content_encoding.WebName;
 					headers.SetInternal ("Content-Type", content_type + "; charset=" + enc_name);

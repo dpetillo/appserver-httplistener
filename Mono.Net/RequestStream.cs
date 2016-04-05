@@ -28,7 +28,11 @@
 using System;
 using System.Net;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
+#if !DNXCORE50
 using System.Net.Sockets;
+#endif
 using System.Runtime.InteropServices;
 namespace Mono.Net {
 	class RequestStream : Stream
@@ -75,13 +79,19 @@ namespace Mono.Net {
 			set { throw new NotSupportedException (); }
 		}
 
+#if !DNXCORE50
 
 		public override void Close ()
-		{
-			disposed = true;
+#else
+        public void Close()
+#endif
+        {
+            disposed = true;
 		}
 
-		public override void Flush ()
+
+
+        public override void Flush ()
 		{
 		}
 
@@ -145,8 +155,8 @@ namespace Mono.Net {
 				remaining_body -= nread;
 			return nread;
 		}
-
-		public override IAsyncResult BeginRead (byte [] buffer, int offset, int count,
+#if !DNXCORE50
+        public override IAsyncResult BeginRead (byte [] buffer, int offset, int count,
 							AsyncCallback cback, object state)
 		{
 			if (disposed)
@@ -193,8 +203,36 @@ namespace Mono.Net {
 				remaining_body -= nread;
 			return nread;
 		}
+#else
+        public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken cancellationToken)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(typeof(RequestStream).ToString());
 
-		public override long Seek (long offset, SeekOrigin origin)
+            int nread = FillFromBuffer(buffer, offset, count);
+            if (nread > 0 || nread == -1)
+            {
+                return nread;
+            }
+
+            // Avoid reading past the end of the request to allow
+            // for HTTP pipelining
+            if (remaining_body >= 0 && count > remaining_body)
+                count = (int)System.Math.Min(Int32.MaxValue, remaining_body);
+
+            nread = await stream.ReadAsync(buffer, offset, count);
+
+            if (disposed)
+                throw new ObjectDisposedException(typeof(RequestStream).ToString());
+
+            if (remaining_body > 0 && nread > 0)
+                remaining_body -= nread;
+            return nread;
+        }
+
+#endif
+
+        public override long Seek (long offset, SeekOrigin origin)
 		{
 			throw new NotSupportedException ();
 		}
@@ -209,7 +247,8 @@ namespace Mono.Net {
 			throw new NotSupportedException ();
 		}
 
-		public override IAsyncResult BeginWrite (byte [] buffer, int offset, int count,
+#if !DNXCORE50
+        public override IAsyncResult BeginWrite (byte [] buffer, int offset, int count,
 							AsyncCallback cback, object state)
 		{
 			throw new NotSupportedException ();
@@ -219,6 +258,7 @@ namespace Mono.Net {
 		{
 			throw new NotSupportedException ();
 		}
+#endif
 	}
 }
 

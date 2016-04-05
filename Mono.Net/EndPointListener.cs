@@ -29,7 +29,9 @@
 
 #if SECURITY_DEP
 
+#if !DNXCORE50
 extern alias MonoSecurity;
+#endif
 
 using System;
 using System.IO;
@@ -40,7 +42,11 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
+
+#if !DNXCORE50
 using MonoSecurity::Mono.Security.Authenticode;
+#endif
+
 
 namespace Mono.Net {
 	sealed class EndPointListener
@@ -76,8 +82,10 @@ namespace Mono.Net {
 
 		void LoadCertificateAndKey (IPAddress addr, int port)
 		{
-			// Actually load the certificate
-			try {
+#if !DNXCORE50
+
+            // Actually load the certificate
+            try {
 				string dirname = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
 				string path = Path.Combine (dirname, ".mono");
 				path = Path.Combine (path, "httplistener");
@@ -92,7 +100,11 @@ namespace Mono.Net {
 			} catch {
 				// ignore errors
 			}
-		}
+#else
+            throw new NotSupportedException();
+#endif
+
+        }
 
 		static void OnAccept (object sender, EventArgs e)
 		{
@@ -109,9 +121,11 @@ namespace Mono.Net {
 					epl.sock.AcceptAsync (args);
 			} catch {
 				if (accepted != null) {
-					try {
+#if !DNXCORE50
+                    try {
 						accepted.Close ();
 					} catch {}
+#endif
 					accepted = null;
 				}
 			} 
@@ -120,7 +134,9 @@ namespace Mono.Net {
 				return;
 
 			if (epl.secure && (epl.cert == null || epl.key == null)) {
+#if !DNXCORE50
 				accepted.Close ();
+#endif
 				return;
 			}
 			HttpConnection conn = new HttpConnection (accepted, epl, epl.secure, epl.cert, epl.key);
@@ -279,7 +295,9 @@ namespace Mono.Net {
 
 		public void Close ()
 		{
+#if !DNXCORE50
 			sock.Close ();
+#endif
 			lock (unregistered) {
 				//
 				// Clone the list because RemoveConnection can be called from Close

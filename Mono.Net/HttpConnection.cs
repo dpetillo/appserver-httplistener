@@ -29,7 +29,9 @@
 
 #if SECURITY_DEP
 
+#if !DNXCORE50
 extern alias MonoSecurity;
+#endif
 
 using System;
 using System.IO;
@@ -40,7 +42,11 @@ using System.Text;
 using System.Threading;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Threading.Tasks;
+
+#if !DNXCORE50
 using MonoSecurity::Mono.Security.Protocol.Tls;
+#endif
 
 namespace Mono.Net {
 	sealed class HttpConnection
@@ -78,11 +84,16 @@ namespace Mono.Net {
 			if (secure == false) {
 				stream = new NetworkStream (sock, false);
 			} else {
-				SslServerStream ssl_stream = new SslServerStream (new NetworkStream (sock, false), cert, false, true, false);
+#if !DNXCORE50
+                
+                SslServerStream ssl_stream = new SslServerStream (new NetworkStream (sock, false), cert, false, true, false);
 				ssl_stream.PrivateKeyCertSelectionDelegate += OnPVKSelection;
 				ssl_stream.ClientCertValidationDelegate += OnClientCertificateValidation;
 				stream = ssl_stream;
-			}
+#else
+                throw new PlatformNotSupportedException();
+#endif
+            }
 			timer = new Timer (OnTimeout, null, Timeout.Infinite, Timeout.Infinite);
 			Init ();
 		}
@@ -97,13 +108,17 @@ namespace Mono.Net {
 
 		bool OnClientCertificateValidation (X509Certificate certificate, int[] errors)
 		{
-			if (certificate == null)
+#if !DNXCORE50
+            if (certificate == null)
 				return true;
 			X509Certificate2 cert = certificate as X509Certificate2;
-			if (cert == null)
-				cert = new X509Certificate2 (certificate.GetRawCertData ());
+            
+
+            if (cert == null)
+                cert = new X509Certificate2 (certificate.GetRawCertData ());
 			client_cert = cert;
 			client_cert_errors = errors;
+#endif
 			return true;
 		}
 
@@ -163,6 +178,8 @@ namespace Mono.Net {
 			Unbind ();
 		}
 
+#if !DNXCORE50
+
 		public void BeginReadRequest ()
 		{
 			if (buffer == null)
@@ -178,18 +195,44 @@ namespace Mono.Net {
 				Unbind ();
 			}
 		}
+#else
+        
+        public void BeginReadRequest()
+        {
+            if (buffer == null)
+                buffer = new byte[BufferSize];
+            try
+            {
+                if (reuses == 1)
+                    s_timeout = 15000;
 
-		public RequestStream GetRequestStream (bool chunked, long contentlength)
+                stream.ReadAsync(buffer, 0, BufferSize).ContinueWith((t) => OnReadInternal(t)).Wait(s_timeout);
+            }
+            catch
+            {
+                CloseSocket();
+                Unbind();
+            }
+        }
+#endif
+
+        public RequestStream GetRequestStream (bool chunked, long contentlength)
 		{
 			if (i_stream == null) {
-				byte [] buffer = ms.GetBuffer ();
-				int length = (int) ms.Length;
+                byte [] buffer = ms.GetBuffer ();
+
+                int length = (int) ms.Length;
 				ms = null;
 				if (chunked) {
 					this.chunked = true;
 					context.Response.SendChunked = true;
-					i_stream = new ChunkedInputStream (context, stream, buffer, position, length - position);
-				} else {
+#if !DNXCORE50
+                    i_stream = new ChunkedInputStream (context, stream, buffer, position, length - position);
+#else
+                    throw new NotImplementedException();
+#endif
+                }
+                else {
 					i_stream = new RequestStream (stream, buffer, position, length - position, contentlength);
 				}
 			}
@@ -215,11 +258,20 @@ namespace Mono.Net {
 
 		void OnReadInternal (IAsyncResult ares)
 		{
-			timer.Change (Timeout.Infinite, Timeout.Infinite);
-			int nread = -1;
-			try {
+            int nread = -1;
+
+#if !DNXCORE50
+            timer.Change (Timeout.Infinite, Timeout.Infinite);
+#endif			
+            try
+            {
+#if !DNXCORE50
 				nread = stream.EndRead (ares);
-				ms.Write (buffer, 0, nread);
+#else
+                nread = ((Task<int>)ares).Result;
+#endif
+
+                ms.Write (buffer, 0, nread);
 				if (ms.Length > 32768) {
 					SendError ("Bad request", 400);
 					Close (true);
@@ -235,7 +287,8 @@ namespace Mono.Net {
 				return;
 			}
 
-			if (nread == 0) {
+
+            if (nread == 0) {
 				//if (ms.Length > 0)
 				//	SendError (); // Why bother?
 				CloseSocket ();
@@ -269,8 +322,13 @@ namespace Mono.Net {
 				listener.RegisterContext (context);
 				return;
 			}
+#if !DNXCORE50
+
 			stream.BeginRead (buffer, 0, BufferSize, onread_cb, this);
-		}
+#else
+            BeginReadRequest();
+#endif
+        }
 
 		void RemoveConnection ()
 		{
@@ -295,12 +353,15 @@ namespace Mono.Net {
 		LineState line_state = LineState.None;
 		int position;
 
-		// true -> done processing
-		// false -> need more input
-		bool ProcessInput (MemoryStream ms)
+
+        // true -> done processing
+        // false -> need more input
+        bool ProcessInput (MemoryStream ms)
 		{
-			byte [] buffer = ms.GetBuffer ();
-			int len = (int) ms.Length;
+
+            byte[] buffer = ms.GetBuffer();
+
+            int len = (int) ms.Length;
 			int used = 0;
 			string line;
 
@@ -429,24 +490,37 @@ namespace Mono.Net {
 		{
 			if (sock == null)
 				return;
-
+#if !DNXCORE50
 			try {
 				sock.Close ();
 			} catch {
 			} finally {
 				sock = null;
 			}
-			RemoveConnection ();
+#else
+            sock = null;
+
+#endif
+            RemoveConnection();
 		}
 
 		internal void Close (bool force_close)
 		{
 			if (sock != null) {
-				Stream st = GetResponseStream ();
+#if !DNXCORE50
+                Stream st = GetResponseStream ();
+
 				if (st != null)
 					st.Close ();
+#else
+                ResponseStream rs = GetResponseStream();
+                if (rs != null)
+                {
+                    rs.Close();
+                }
+#endif
 
-				o_stream = null;
+                o_stream = null;
 			}
 
 			if (sock != null) {
@@ -486,9 +560,13 @@ namespace Mono.Net {
 					if (s != null)
 						s.Shutdown (SocketShutdown.Both);
 				} catch {
-				} finally {
+				}
+                finally {
+#if !DNXCORE50
+
 					if (s != null)
 						s.Close ();
+#endif
 				}
 				Unbind ();
 				RemoveConnection ();
@@ -497,5 +575,23 @@ namespace Mono.Net {
 		}
 	}
 }
+#endif
+
+#if DNXCORE50
+
+        public static class MemoryStreamExtension
+{
+    public static byte[] GetBuffer(this MemoryStream ms)
+    {
+        byte[] buffer = new byte[0];
+        ArraySegment<byte> arrSeg;
+        if (ms.TryGetBuffer(out arrSeg))
+        {
+            buffer = arrSeg.Array;
+        }
+        return buffer;
+    }
+}
+
 #endif
 

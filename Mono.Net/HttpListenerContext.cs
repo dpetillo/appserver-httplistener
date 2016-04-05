@@ -104,12 +104,16 @@ namespace Mono.Net {
 				string user = null;
 				string password = null;
 				int pos = -1;
-				string authString = System.Text.Encoding.Default.GetString (Convert.FromBase64String (authData));
-	
-				// The format is DOMAIN\username:password
-				// Domain is optional
+#if DNXCORE50
+                string authString = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(authData));
+#else
+                string authString = System.Text.Encoding.Default.GetString (Convert.FromBase64String (authData));
+#endif
 
-				pos = authString.IndexOf (':');
+                // The format is DOMAIN\username:password
+                // Domain is optional
+
+                pos = authString.IndexOf (':');
 	
 				// parse the password off the end
 				password = authString.Substring (pos+1);

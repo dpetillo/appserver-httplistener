@@ -37,7 +37,9 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
+#if !DNXCORE50
 using System.Security.Permissions;
+#endif
 using System.Text;
 
 namespace Mono.Net {
@@ -573,7 +575,7 @@ namespace Mono.Net {
 			'\u200C'
 		};
 
-		#region Methods
+#region Methods
 	
 		public static void HtmlAttributeEncode (string s, TextWriter output) 
 		{
@@ -624,8 +626,20 @@ namespace Mono.Net {
 	
 		static char [] GetChars (MemoryStream b, Encoding e)
 		{
-			return e.GetChars (b.GetBuffer (), 0, (int) b.Length);
-		}
+#if DNXCORE50
+            var arrSeg = new ArraySegment<byte>();
+            if (!b.TryGetBuffer(out arrSeg))
+            {
+                return new char[0];
+            }
+            else
+            {
+                return e.GetChars(arrSeg.Array, arrSeg.Offset, (int)arrSeg.Count);
+            }
+#else
+            return e.GetChars (b.GetBuffer (), 0, (int) b.Length);
+#endif
+        }
 
 		static void WriteCharBytes (IList buf, char ch, Encoding e)
 		{
@@ -1369,7 +1383,7 @@ namespace Mono.Net {
 					break;
 			}
 		}
-		#endregion // Methods
+#endregion // Methods
 	}
 }
 

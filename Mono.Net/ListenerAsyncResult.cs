@@ -68,9 +68,13 @@ namespace Mono.Net {
 					handle.Set ();
 
 				if (cb != null)
-					ThreadPool.UnsafeQueueUserWorkItem (InvokeCB, this);
-			}
-		}
+#if !DNXCORE50
+                    ThreadPool.UnsafeQueueUserWorkItem (InvokeCB, this);
+#else
+                    ThreadPool.QueueUserWorkItem(InvokeCB, this);
+#endif
+            }
+        }
 
 		static WaitCallback InvokeCB = new WaitCallback (InvokeCallback);
 		static void InvokeCallback (object o)
@@ -104,8 +108,13 @@ namespace Mono.Net {
 				if ((schemes == AuthenticationSchemes.Basic || context.Listener.AuthenticationSchemes == AuthenticationSchemes.Negotiate) && context.Request.Headers ["Authorization"] == null) {
 					context.Response.StatusCode = 401;
 					context.Response.Headers ["WWW-Authenticate"] = schemes + " realm=\"" + context.Listener.Realm + "\"";
-					context.Response.OutputStream.Close ();
-					IAsyncResult ares = context.Listener.BeginGetContext (cb, state);
+#if !DNXCORE50
+                    context.Response.OutputStream.Close ();
+#else
+                    ((ResponseStream)context.Response.OutputStream).Close();
+#endif
+
+                    IAsyncResult ares = context.Listener.BeginGetContext (cb, state);
 					this.forward = (ListenerAsyncResult) ares;
 					lock (forward.locker) {
 						if (handle != null)
@@ -123,8 +132,12 @@ namespace Mono.Net {
 						handle.Set ();
 
 					if (cb != null)
+#if !DNXCORE50
 						ThreadPool.UnsafeQueueUserWorkItem (InvokeCB, this);
-				}
+#else
+                        ThreadPool.QueueUserWorkItem(InvokeCB, this);
+#endif
+                }
 			}
 		}
 

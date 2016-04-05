@@ -47,7 +47,12 @@ namespace Mono.Net
 {
 	[Serializable]
 	[ComVisible(true)]
-	public class WebHeaderCollection : NameValueCollection, ISerializable {
+
+#if !DNXCORE50
+    public class WebHeaderCollection : NameValueCollection, ISerializable {
+#else
+    public class WebHeaderCollection : NameValueCollection {
+#endif
 		[Flags]
 		internal enum HeaderInfo
 		{
@@ -121,7 +126,8 @@ namespace Mono.Net
 		public WebHeaderCollection ()
 		{
 		}
-		
+
+#if !DNXCORE50
 		protected WebHeaderCollection (SerializationInfo serializationInfo, 
 					       StreamingContext streamingContext)
 		{
@@ -140,6 +146,7 @@ namespace Mono.Net
 			}
 			
 		}
+#endif
 
 		internal WebHeaderCollection (HeaderInfo headerRestriction)
 		{
@@ -269,11 +276,13 @@ namespace Mono.Net
 			return (info & flag) != 0;
 		}
 
-		public override void OnDeserialization (object sender)
+#if !DNXCORE50
+        public override void OnDeserialization (object sender)
 		{
 		}
+#endif
 
-		public override void Remove (string name)
+        public override void Remove (string name)
 		{
 			if (name == null)
 				throw new ArgumentNullException ("name");
@@ -341,14 +350,16 @@ namespace Mono.Net
 
 			return sb.Append("\r\n").ToString();
 		}
-#if !TARGET_JVM
+#if !TARGET_JVM && !DNXCORE50
 		void ISerializable.GetObjectData (SerializationInfo serializationInfo,
 						  StreamingContext streamingContext)
 		{
 			GetObjectData (serializationInfo, streamingContext);
 		}
 #endif
-		public override void GetObjectData (SerializationInfo serializationInfo, StreamingContext streamingContext)
+
+#if !DNXCORE50
+        public override void GetObjectData (SerializationInfo serializationInfo, StreamingContext streamingContext)
 		{
 			int count = base.Count;
 			serializationInfo.AddValue ("Count", count);
@@ -357,8 +368,9 @@ namespace Mono.Net
 				serializationInfo.AddValue ((count + i).ToString (), Get (i));
 			}
 		}
+#endif
 
-		public override string[] AllKeys {
+        public override string[] AllKeys {
 			get {
 				return base.AllKeys;
 			}

@@ -30,7 +30,9 @@
 
 #if SECURITY_DEP
 
+#if !DNXCORE50
 extern alias MonoSecurity;
+#endif
 
 using System;
 using System.Collections;
@@ -46,7 +48,9 @@ using System.Security.Authentication.ExtendedProtection;
 #if NET_4_5
 using System.Threading.Tasks;
 #endif
+#if !DNXCORE50
 using MonoSecurity::Mono.Security.Protocol.Tls;
+#endif
 
 namespace Mono.Net {
 	public sealed class HttpListenerRequest
@@ -235,8 +239,13 @@ namespace Mono.Net {
 
 			string name = header.Substring (0, colon).Trim ();
 			string val = header.Substring (colon + 1).Trim ();
-			string lower = name.ToLower (CultureInfo.InvariantCulture);
-			headers.SetInternal (name, val);
+#if !DNXCORE50
+            string lower = name.ToLower (CultureInfo.InvariantCulture);
+#else
+            string lower = name.ToLower();
+#endif
+
+            headers.SetInternal (name, val);
 			switch (lower) {
 				case "accept-language":
 					user_languages = val.Split (','); // yes, only split with a ','
@@ -319,10 +328,12 @@ namespace Mono.Net {
 				length = (int) System.Math.Min (content_length, (long) length);
 
 			byte [] bytes = new byte [length];
-			while (true) {
+#if !DNXCORE50
+
+            while (true) {
 				// TODO: test if MS has a timeout when doing this
 				try {
-					IAsyncResult ares = InputStream.BeginRead (bytes, 0, length, null, null);
+					IAsyncResult ares =  InputStream.BeginRead (bytes, 0, length, null, null);
 					if (!ares.IsCompleted && !ares.AsyncWaitHandle.WaitOne (1000))
 						return false;
 					if (InputStream.EndRead (ares) <= 0)
@@ -331,7 +342,17 @@ namespace Mono.Net {
 					return false;
 				}
 			}
-		}
+#else
+            try {
+                InputStream.Read(bytes, 0, length);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+#endif
+        }
 
 		public string [] AcceptTypes {
 			get { return accept_types; }
@@ -351,9 +372,14 @@ namespace Mono.Net {
 
 		public Encoding ContentEncoding {
 			get {
+#if DNXCORE50
 				if (content_encoding == null)
+					content_encoding = Encoding.UTF8;
+#else
+                if (content_encoding == null)
 					content_encoding = Encoding.Default;
-				return content_encoding;
+#endif
+                return content_encoding;
 			}
 		}
 

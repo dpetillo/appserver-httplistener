@@ -353,8 +353,12 @@ namespace Mono.Net
 
 		static void ThrowProtocolViolation (string message)
 		{
-			WebException we = new WebException (message, null, WebExceptionStatus.ServerProtocolViolation, null);
-			throw we;
+#if !DNXCORE50
+            WebException we = new WebException (message, null, WebExceptionStatus.ServerProtocolViolation, null);
+#else
+            Exception we = new Exception(message);
+#endif
+            throw we;
 		}
 	}
 }

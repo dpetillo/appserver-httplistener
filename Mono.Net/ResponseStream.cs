@@ -76,8 +76,12 @@ namespace Mono.Net {
 		}
 
 
-		public override void Close ()
-		{
+#if !DNXCORE50
+        public override void Close ()
+#else
+        public void Close()
+#endif
+        {
 			if (disposed == false) {
 				disposed = true;
 				byte [] bytes = null;
@@ -169,7 +173,8 @@ namespace Mono.Net {
 				InternalWrite (crlf, 0, 2);
 		}
 
-		public override IAsyncResult BeginWrite (byte [] buffer, int offset, int count,
+#if !DNXCORE50
+        public override IAsyncResult BeginWrite (byte [] buffer, int offset, int count,
 							AsyncCallback cback, object state)
 		{
 			if (disposed)
@@ -214,13 +219,15 @@ namespace Mono.Net {
 					stream.Write (crlf, 0, 2);
 			}
 		}
+#endif
 
 		public override int Read ([In,Out] byte[] buffer, int offset, int count)
 		{
 			throw new NotSupportedException ();
 		}
 
-		public override IAsyncResult BeginRead (byte [] buffer, int offset, int count,
+#if !DNXCORE50
+        public override IAsyncResult BeginRead (byte [] buffer, int offset, int count,
 							AsyncCallback cback, object state)
 		{
 			throw new NotSupportedException ();
@@ -230,6 +237,7 @@ namespace Mono.Net {
 		{
 			throw new NotSupportedException ();
 		}
+#endif
 
 		public override long Seek (long offset, SeekOrigin origin)
 		{

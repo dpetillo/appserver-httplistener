@@ -29,6 +29,7 @@ using System;
 using System.Net;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+
 namespace Mono.Net {
 	[Serializable]
 	public class HttpListenerException : Win32Exception
@@ -45,13 +46,21 @@ namespace Mono.Net {
 		{
 		}
 
-		protected HttpListenerException (SerializationInfo serializationInfo, StreamingContext streamingContext) : base (serializationInfo, streamingContext)
+#if !DNXCORE50
+        protected HttpListenerException (SerializationInfo serializationInfo, StreamingContext streamingContext) : base (serializationInfo, streamingContext)
 		{
 		}
 
 		public override int ErrorCode {
 			get { return base.ErrorCode; }
 		}
-	}
+#else
+        public int ErrorCode
+        {
+            get { return base.NativeErrorCode; }
+        }
+#endif
+
+    }
 }
 
