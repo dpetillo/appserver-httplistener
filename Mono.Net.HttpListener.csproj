@@ -7,8 +7,8 @@
     <ProjectGuid>{B215459F-37FF-411C-8E6B-9CDEDB946F93}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mono.Net</RootNamespace>
-    <AssemblyName>Mono.Net.HttpListener</AssemblyName>
+    <RootNamespace>Mono.Net.HttpListener</RootNamespace>
+    <AssemblyName>Mono.Net.HttpListener.HttpListener</AssemblyName>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'net_4_0_Debug|AnyCPU' ">
@@ -59,28 +59,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mono.Net\AuthenticationSchemes.cs" />
-    <Compile Include="Mono.Net\AuthenticationSchemeSelector.cs" />
-    <Compile Include="Mono.Net\ChunkedInputStream.cs" />
-    <Compile Include="Mono.Net\ChunkStream.cs" />
-    <Compile Include="Mono.Net\EndPointListener.cs" />
-    <Compile Include="Mono.Net\EndPointManager.cs" />
-    <Compile Include="Mono.Net\Extensions.cs" />
-    <Compile Include="Mono.Net\HttpConnection.cs" />
-    <Compile Include="Mono.Net\HttpListener.cs" />
-    <Compile Include="Mono.Net\HttpListenerBasicIdentity.cs" />
-    <Compile Include="Mono.Net\HttpListenerContext.cs" />
-    <Compile Include="Mono.Net\HttpListenerException.cs" />
-    <Compile Include="Mono.Net\HttpListenerPrefixCollection.cs" />
-    <Compile Include="Mono.Net\HttpListenerRequest.cs" />
-    <Compile Include="Mono.Net\HttpListenerResponse.cs" />
-    <Compile Include="Mono.Net\HttpStreamAsyncResult.cs" />
-    <Compile Include="Mono.Net\HttpUtility.cs" />
-    <Compile Include="Mono.Net\ListenerAsyncResult.cs" />
-    <Compile Include="Mono.Net\ListenerPrefix.cs" />
-    <Compile Include="Mono.Net\RequestStream.cs" />
-    <Compile Include="Mono.Net\ResponseStream.cs" />
-    <Compile Include="Mono.Net\WebHeaderCollection.cs" />
+    <Compile Include="Mono.Net.HttpListener\AuthenticationSchemes.cs" />
+    <Compile Include="Mono.Net.HttpListener\AuthenticationSchemeSelector.cs" />
+    <Compile Include="Mono.Net.HttpListener\ChunkedInputStream.cs" />
+    <Compile Include="Mono.Net.HttpListener\ChunkStream.cs" />
+    <Compile Include="Mono.Net.HttpListener\EndPointListener.cs" />
+    <Compile Include="Mono.Net.HttpListener\EndPointManager.cs" />
+    <Compile Include="Mono.Net.HttpListener\Extensions.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpConnection.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListener.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListenerBasicIdentity.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListenerContext.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListenerException.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListenerPrefixCollection.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListenerRequest.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpListenerResponse.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpStreamAsyncResult.cs" />
+    <Compile Include="Mono.Net.HttpListener\HttpUtility.cs" />
+    <Compile Include="Mono.Net.HttpListener\ListenerAsyncResult.cs" />
+    <Compile Include="Mono.Net.HttpListener\ListenerPrefix.cs" />
+    <Compile Include="Mono.Net.HttpListener\RequestStream.cs" />
+    <Compile Include="Mono.Net.HttpListener\ResponseStream.cs" />
+    <Compile Include="Mono.Net.HttpListener\WebHeaderCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

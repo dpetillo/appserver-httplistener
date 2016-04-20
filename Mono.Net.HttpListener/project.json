@@ -1,6 +1,6 @@
 {
     "version": "1.0.0-*",
-    "description": "TR.AppServer.InterfacesDNX Console Application",
+    "description": "A fully managed HttpListener for the .NET Core.",
     "authors": [ "derek" ],
     "tags": [ "" ],
     "projectUrl": "",
@@ -16,10 +16,6 @@
         "System.Threading.Tasks": "4.0.11-beta-23516",
         "System.Threading.ThreadPool": "4.0.10-beta-23516",
         "System.Threading.Timer": "4.0.1-beta-23516"
-    },
-
-    "commands": {
-        "TR.AppServer.InterfacesDNX": "TR.AppServer.InterfacesDNX"
     },
 
     "frameworks": {

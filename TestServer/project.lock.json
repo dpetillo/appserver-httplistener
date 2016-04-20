@@ -43,7 +43,7 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Mono.Net/1.0.0": {
+      "Mono.Net.HttpListener/1.0.0": {
         "type": "project",
         "framework": "DNXCore,Version=v5.0",
         "dependencies": {
@@ -704,7 +704,7 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Mono.Net/1.0.0": {
+      "Mono.Net.HttpListener/1.0.0": {
         "type": "project",
         "framework": "DNXCore,Version=v5.0",
         "dependencies": {
@@ -1568,7 +1568,7 @@
           "lib/dotnet/Microsoft.Win32.Primitives.dll": {}
         }
       },
-      "Mono.Net/1.0.0": {
+      "Mono.Net.HttpListener/1.0.0": {
         "type": "project",
         "framework": "DNXCore,Version=v5.0",
         "dependencies": {
@@ -2393,9 +2393,9 @@
     }
   },
   "libraries": {
-    "Mono.Net/1.0.0": {
+    "Mono.Net.HttpListener/1.0.0": {
       "type": "project",
-      "path": "../Mono.Net/project.json"
+      "path": "../Mono.Net.HttpListener/project.json"
     },
     "Microsoft.CSharp/4.0.1-beta-23516": {
       "type": "package",
@@ -4303,7 +4303,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
-      "Mono.Net >= 1.0.0-*"
+      "Mono.Net.HttpListener >= 1.0.0"
     ],
     "DNXCore,Version=v5.0": [
       "Microsoft.CSharp >= 4.0.1-beta-23516",

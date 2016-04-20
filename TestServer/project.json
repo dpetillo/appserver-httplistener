@@ -11,7 +11,7 @@
   },
 
     "dependencies": {
-        "Mono.Net": "1.0.0-*"
+        "Mono.Net.HttpListener": "1.0.0"
     },
 
     "commands": {
