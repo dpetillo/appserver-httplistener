@@ -9,13 +9,12 @@
     <licenseUrl>http://opensource.org/licenses/mit-license.php</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <projectUrl>http://github.com/jbevain/mono.net.httplistener/</projectUrl>
-    <summary>A fully managed HttpListener implementation extracted from Mono.</summary>
-    <description>A fully managed HttpListener implementation extracted from Mono. It's not as complete as the .net implementation of System.Net.HttpListener, but it doesn't require Administrator rights to listen on all interfaces, making it perfect to serve http content for test servers.</description>
+    <summary>A fully managed HttpListener for the .NET Core.</summary>
+    <description>A fully managed HttpListener for .NET Core.  This is pulled from the Mono project, it's not as complete as the .net implementation of System.Net.HttpListener, but it doesn't require Administrator rights to listen on all interfaces, making it perfect to serve http content for test servers.</description>
     <language>en-US</language>
-    <tags>http listener httplistener server mono</tags>
+    <tags>http listener httplistener server mono dotnet core dnxcore50</tags>
   </metadata>
   <files>
-    <file src="bin\net_4_0_Release\*.dll" target="lib/net40" />
-    <file src="bin\net_4_5_Release\*.dll" target="lib/net45" />
+    <file src="artifacts\bin\Mono.Net.HttpListener2\Release\dnxcore50\*.dll" target="lib/dnxcore50" />
   </files>
 </package>
