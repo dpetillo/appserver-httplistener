@@ -26,7 +26,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 #if SECURITY_DEP
-#if !DNXCORE50
 
 using System;
 using System.Net;
@@ -77,6 +76,7 @@ namespace Mono.Net {
             set { decoder = value; }
         }
 
+#if !DNXCORE50
         public override int Read([In, Out] byte[] buffer, int offset, int count)
         {
             IAsyncResult ares = BeginRead(buffer, offset, count, null, null);
@@ -179,7 +179,74 @@ namespace Mono.Net {
 
             return my_ares.Count;
         }
+#else
 
+        public override int Read([In, Out] byte[] buffer, int offset, int count)
+        {
+            return ReadAsync(buffer, offset, count, CancellationToken.None).Result;
+        }
+        public override async Task<int> ReadAsync(byte[] buffer, int offset, int count, CancellationToken token)
+        {
+            if (disposed)
+                throw new ObjectDisposedException(GetType().ToString());
+
+            if (buffer == null)
+                throw new ArgumentNullException("buffer");
+
+            int len = buffer.Length;
+            if (offset < 0 || offset > len)
+                throw new ArgumentOutOfRangeException("offset exceeds the size of buffer");
+
+            if (count < 0 || offset > len - count)
+                throw new ArgumentOutOfRangeException("offset+size exceeds the size of buffer");
+
+            if (no_more_data)
+            {
+                return 0;
+            }
+
+            int nread = decoder.Read(buffer, offset, count);
+            offset += nread;
+            count -= nread;
+            if (count == 0)
+            {
+                // got all we wanted, no need to bother the decoder yet
+                return nread;
+            }
+            if (!decoder.WantMore)
+            {
+                no_more_data = nread == 0;
+                return nread;
+            }
+            ReadBufferState rb = new ReadBufferState(buffer, offset, count, null);
+            rb.InitialCount += nread;
+            var readBuff = new byte[8192];
+            var readCount = 8192;
+            try
+            {
+                while (true)
+                {
+                    nread = await base.ReadAsync(readBuff, 0, readCount, token);
+                    decoder.Write(readBuff, 0, nread);
+                    nread = decoder.Read(rb.Buffer, rb.Offset, rb.Count);
+                    rb.Offset += nread;
+                    rb.Count -= nread;
+                    if (rb.Count == 0 || !decoder.WantMore || nread == 0)
+                    {
+                        no_more_data = !decoder.WantMore && nread == 0;
+                        return rb.InitialCount - rb.Count;
+                    }
+                    readCount = System.Math.Min(8192, decoder.ChunkLeft + 6);
+                }
+            }
+            catch (Exception e)
+            {
+                context.Connection.SendError(e.Message, 400);
+                return 0;
+            }
+        }
+
+#endif
 #if !DNXCORE50
         public override void Close ()
         {
@@ -191,6 +258,4 @@ namespace Mono.Net {
 #endif
     }
 }
-
-#endif
 #endif

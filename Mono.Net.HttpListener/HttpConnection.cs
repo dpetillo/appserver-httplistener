@@ -226,11 +226,7 @@ namespace Mono.Net {
 				if (chunked) {
 					this.chunked = true;
 					context.Response.SendChunked = true;
-#if !DNXCORE50
                     i_stream = new ChunkedInputStream (context, stream, buffer, position, length - position);
-#else
-                    throw new NotImplementedException();
-#endif
                 }
                 else {
 					i_stream = new RequestStream (stream, buffer, position, length - position, contentlength);
