@@ -29,10 +29,6 @@
 
 #if SECURITY_DEP
 
-#if !DNXCORE50
-extern alias MonoSecurity;
-#endif
-
 using System;
 using System.IO;
 using System.Net;
@@ -45,7 +41,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 #if !DNXCORE50
-using MonoSecurity::Mono.Security.Protocol.Tls;
+using Mono.Security.Protocol.Tls;
 #endif
 
 namespace Mono.Net {

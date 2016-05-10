@@ -30,10 +30,6 @@
 
 #if SECURITY_DEP
 
-#if !DNXCORE50
-extern alias MonoSecurity;
-#endif
-
 using System;
 using System.Collections;
 using System.Collections.Specialized;
@@ -49,7 +45,7 @@ using System.Security.Authentication.ExtendedProtection;
 using System.Threading.Tasks;
 #endif
 #if !DNXCORE50
-using MonoSecurity::Mono.Security.Protocol.Tls;
+using Mono.Security.Protocol.Tls;
 #endif
 
 namespace Mono.Net {

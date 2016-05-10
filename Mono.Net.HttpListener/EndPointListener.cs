@@ -29,10 +29,6 @@
 
 #if SECURITY_DEP
 
-#if !DNXCORE50
-extern alias MonoSecurity;
-#endif
-
 using System;
 using System.IO;
 using System.Net;
@@ -44,12 +40,12 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 #if !DNXCORE50
-using MonoSecurity::Mono.Security.Authenticode;
+using Mono.Security.Authenticode;
 #endif
 
 
 namespace Mono.Net {
-	sealed class EndPointListener
+    sealed class EndPointListener
 	{
 		IPEndPoint endpoint;
 		Socket sock;
