@@ -40,7 +40,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
 #if !DNXCORE50
+#if !DNX45
 using Mono.Security.Authenticode;
+#endif
 #endif
 
 
@@ -79,7 +81,7 @@ namespace Mono.Net {
 		void LoadCertificateAndKey (IPAddress addr, int port)
 		{
 #if !DNXCORE50
-
+#if !DNX45
             // Actually load the certificate
             try {
 				string dirname = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
@@ -98,6 +100,7 @@ namespace Mono.Net {
 			}
 #else
             throw new NotSupportedException();
+#endif
 #endif
 
         }

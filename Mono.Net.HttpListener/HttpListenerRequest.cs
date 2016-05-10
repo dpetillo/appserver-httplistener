@@ -45,7 +45,9 @@ using System.Security.Authentication.ExtendedProtection;
 using System.Threading.Tasks;
 #endif
 #if !DNXCORE50
+#if !DNX45
 using Mono.Security.Protocol.Tls;
+#endif
 #endif
 
 namespace Mono.Net {

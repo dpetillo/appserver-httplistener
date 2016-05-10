@@ -36,7 +36,6 @@
         },
         "dnx45": {
             "dependencies": {
-                "Mono.Security": "3.2.3"
             }
         }
     },

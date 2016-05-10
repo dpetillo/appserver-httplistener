@@ -41,7 +41,9 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 #if !DNXCORE50
+#if !DNX45
 using Mono.Security.Protocol.Tls;
+#endif
 #endif
 
 namespace Mono.Net {
@@ -81,13 +83,14 @@ namespace Mono.Net {
 				stream = new NetworkStream (sock, false);
 			} else {
 #if !DNXCORE50
-                
+#if !DNX45
                 SslServerStream ssl_stream = new SslServerStream (new NetworkStream (sock, false), cert, false, true, false);
 				ssl_stream.PrivateKeyCertSelectionDelegate += OnPVKSelection;
 				ssl_stream.ClientCertValidationDelegate += OnClientCertificateValidation;
 				stream = ssl_stream;
 #else
                 throw new PlatformNotSupportedException();
+#endif
 #endif
             }
 			timer = new Timer (OnTimeout, null, Timeout.Infinite, Timeout.Infinite);
