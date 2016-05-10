@@ -29,6 +29,12 @@
 
 #if SECURITY_DEP
 
+#if !DNXCORE50
+#if !DNX45
+extern alias MonoSecurity;
+#endif
+#endif
+
 using System;
 using System.IO;
 using System.Net;
@@ -42,7 +48,7 @@ using System.Threading.Tasks;
 
 #if !DNXCORE50
 #if !DNX45
-using Mono.Security.Protocol.Tls;
+using MonoSecurity::Mono.Security.Protocol.Tls;
 #endif
 #endif
 
