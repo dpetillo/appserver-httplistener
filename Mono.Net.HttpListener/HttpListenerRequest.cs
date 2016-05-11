@@ -30,10 +30,8 @@
 
 #if SECURITY_DEP
 
-#if !DNXCORE50
-#if !DNX45
+#if !DNXCORE50 && !DNX45 && !NET45
 extern alias MonoSecurity;
-#endif
 #endif
 
 using System;
@@ -47,13 +45,11 @@ using System.Text;
 #if NET_4_0
 using System.Security.Authentication.ExtendedProtection;
 #endif
-#if NET_4_5
+#if NET45
 using System.Threading.Tasks;
 #endif
-#if !DNXCORE50
-#if !DNX45
+#if !DNXCORE50 && !DNX45 && !NET45
 using MonoSecurity::Mono.Security.Protocol.Tls;
-#endif
 #endif
 
 namespace Mono.Net {
@@ -549,7 +545,7 @@ namespace Mono.Net {
 		}
 #endif
 		
-#if NET_4_5
+#if NET45
 		public bool IsWebSocketRequest {
 			get {
 				return false;

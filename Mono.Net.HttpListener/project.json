@@ -37,6 +37,10 @@
         "dnx45": {
             "dependencies": {
             }
+        },
+        "net45": {
+            "dependencies": {
+            }
         }
     },
     "userSecretsId": "aspnet5-TR.AppServer.Interfaces-20160330053024"

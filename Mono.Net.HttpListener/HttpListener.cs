@@ -34,7 +34,7 @@
 using System;
 using System.Collections;
 using System.Threading;
-#if NET_4_5
+#if NET45
 using System.Threading.Tasks;
 #endif
 using System.Net;
@@ -290,7 +290,7 @@ namespace Mono.Net {
 			disposed = true;
 		}
 
-#if NET_4_5
+#if NET45
 		public Task<HttpListenerContext> GetContextAsync ()
 		{
 			return Task<HttpListenerContext>.Factory.FromAsync (BeginGetContext, EndGetContext, null);

@@ -29,10 +29,8 @@
 
 #if SECURITY_DEP
 
-#if !DNXCORE50
-#if !DNX45
+#if !DNXCORE50 && !DNX45 && !NET45
 extern alias MonoSecurity;
-#endif
 #endif
 
 using System;
@@ -45,10 +43,8 @@ using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
-#if !DNXCORE50
-#if !DNX45
+#if !DNXCORE50 && !DNX45 && !NET45
 using MonoSecurity::Mono.Security.Authenticode;
-#endif
 #endif
 
 
@@ -86,8 +82,7 @@ namespace Mono.Net {
 
 		void LoadCertificateAndKey (IPAddress addr, int port)
 		{
-#if !DNXCORE50
-#if !DNX45
+#if !DNXCORE50 && !DNX45 && !NET45
             // Actually load the certificate
             try {
 				string dirname = Environment.GetFolderPath (Environment.SpecialFolder.ApplicationData);
@@ -106,7 +101,6 @@ namespace Mono.Net {
 			}
 #else
             throw new NotSupportedException();
-#endif
 #endif
 
         }
