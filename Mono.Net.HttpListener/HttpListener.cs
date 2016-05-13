@@ -33,11 +33,7 @@
 
 using System;
 using System.Collections;
-using System.Threading;
-#if NET45
 using System.Threading.Tasks;
-#endif
-using System.Net;
 
 //TODO: logging
 namespace Mono.Net {
@@ -290,12 +286,10 @@ namespace Mono.Net {
 			disposed = true;
 		}
 
-#if NET45
-		public Task<HttpListenerContext> GetContextAsync ()
+		public Task<HttpListenerContext> GetContextAsync()
 		{
-			return Task<HttpListenerContext>.Factory.FromAsync (BeginGetContext, EndGetContext, null);
+			return Task<HttpListenerContext>.Factory.FromAsync(BeginGetContext, EndGetContext, null);
 		}
-#endif
 
 		internal void CheckDisposed ()
 		{
