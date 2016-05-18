@@ -71,10 +71,6 @@ namespace Mono.Net {
 			endpoint = new IPEndPoint (addr, port);
 			sock = new Socket (addr.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
 
-            //DBP - apparently required for Debian 14.4
-            sock.ExclusiveAddressUse = false;
-            sock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-
             sock.Bind (endpoint);
 
             sock.Listen (500);
