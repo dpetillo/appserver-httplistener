@@ -6,10 +6,12 @@
     "projectUrl": "",
     "licenseUrl": "",
 
-    "compilationOptions": {
-        "emitEntryPoint": false,
-        "define": [ "SECURITY_DEP" ]
-    },
+  "compilationOptions": {
+    "emitEntryPoint": false,
+    "define": [ "SECURITY_DEP" ],
+    "keyFile": "../httpListener.snk",
+    "publicSign": true
+  },
     "dependencies": {
     },
 
