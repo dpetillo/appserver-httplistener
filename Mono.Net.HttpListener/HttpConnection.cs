@@ -485,17 +485,17 @@ namespace Mono.Net {
 		{
 			if (sock == null)
 				return;
-#if !DNXCORE50
 			try {
+#if !DNXCORE50
 				sock.Close ();
-			} catch {
+#else
+                sock.Dispose();
+#endif
+            } catch {
 			} finally {
 				sock = null;
 			}
-#else
-            sock = null;
 
-#endif
             RemoveConnection();
 		}
 

@@ -298,8 +298,10 @@ namespace Mono.Net {
 		{
 #if !DNXCORE50
 			sock.Close ();
+#else
+            sock.Dispose();
 #endif
-			lock (unregistered) {
+            lock (unregistered) {
 				//
 				// Clone the list because RemoveConnection can be called from Close
 				//
