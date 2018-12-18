@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>TestServer Console Application</Description>
+    <Authors>derek</Authors>
+    <TargetFrameworks>netcoreapp2.0;netcoreapp2.1;</TargetFrameworks>
+    <AssemblyName>TestServer</AssemblyName>
+    <OutputType>Exe</OutputType>
+    <PackageId>TestServer</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="System.Collections" />
+    <PackageReference Include="System.Console" />
+    <PackageReference Include="System.Linq" />
+    <PackageReference Include="System.Threading" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Mono.Net.HttpListener\Mono.Net.HttpListener.csproj" />
+  </ItemGroup>
+
+</Project>

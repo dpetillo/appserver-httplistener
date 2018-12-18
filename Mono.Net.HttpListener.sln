@@ -1,18 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Net.HttpListener", "Mono.Net.HttpListener.csproj", "{B215459F-37FF-411C-8E6B-9CDEDB946F93}"
-EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "TestServer", "TestServer\TestServer.xproj", "{81146A05-71CF-4188-AE32-10274EC89451}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1E6C4184-0D06-40ED-B01D-954A63972B94}"
-	ProjectSection(SolutionItems) = preProject
-		global.json = global.json
-	EndProjectSection
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Mono.Net.HttpListener2", "Mono.Net.HttpListener\Mono.Net.HttpListener2.xproj", "{E8E08D80-C935-4E2A-8982-C5FB0E163936}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestServer", "TestServer\TestServer.csproj", "{81146A05-71CF-4188-AE32-10274EC89451}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mono.Net.HttpListener", "Mono.Net.HttpListener\Mono.Net.HttpListener.csproj", "{E8E08D80-C935-4E2A-8982-C5FB0E163936}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,18 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.ActiveCfg = net_4_0_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Debug|Any CPU.Build.0 = net_4_0_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.ActiveCfg = net_4_0_Release|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_0_Release|Any CPU.Build.0 = net_4_0_Release|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.ActiveCfg = net_4_5_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Debug|Any CPU.Build.0 = net_4_5_Debug|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.net_4_5_Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.ActiveCfg = net_4_5_Release|Any CPU
-		{B215459F-37FF-411C-8E6B-9CDEDB946F93}.Release|Any CPU.Build.0 = net_4_5_Release|Any CPU
 		{81146A05-71CF-4188-AE32-10274EC89451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{81146A05-71CF-4188-AE32-10274EC89451}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81146A05-71CF-4188-AE32-10274EC89451}.net_4_0_Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -63,5 +46,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6F5A9472-367B-401A-8A7B-C0DD3BBF8FE0}
 	EndGlobalSection
 EndGlobal
