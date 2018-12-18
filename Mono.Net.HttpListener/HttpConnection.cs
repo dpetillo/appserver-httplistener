@@ -578,12 +578,7 @@ namespace Mono.Net {
 {
     public static byte[] GetBuffer(this MemoryStream ms)
     {
-        byte[] buffer = new byte[0];
-        ArraySegment<byte> arrSeg;
-        if (ms.TryGetBuffer(out arrSeg))
-        {
-            buffer = arrSeg.Array;
-        }
+        byte[] buffer = ms.GetBuffer();
         return buffer;
     }
 }

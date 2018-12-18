@@ -627,15 +627,8 @@ namespace Mono.Net {
 		static char [] GetChars (MemoryStream b, Encoding e)
 		{
 #if DNXCORE50
-            var arrSeg = new ArraySegment<byte>();
-            if (!b.TryGetBuffer(out arrSeg))
-            {
-                return new char[0];
-            }
-            else
-            {
-                return e.GetChars(arrSeg.Array, arrSeg.Offset, (int)arrSeg.Count);
-            }
+            var arrSeg = b.GetBuffer();
+            return e.GetChars(arrSeg, 0, (int)b.Length);
 #else
             return e.GetChars (b.GetBuffer (), 0, (int) b.Length);
 #endif
