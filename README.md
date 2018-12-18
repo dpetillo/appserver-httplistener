@@ -1,4 +1,4 @@
-Mono.Net.HttpListener
+NetCore HttpListener
 ==================
 
 This project is a fork of the Mono implementation of HttpListener, where it has been ported to .NET Core.  
